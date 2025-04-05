@@ -10,6 +10,9 @@ import RealityKit
 import RealityKitContent
 
 struct ContentView: View {
+    @Environment(\.openImmersiveSpace) private var openImmersiveSpace
+    @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
+    @State private var isImmersive = false
 
     var body: some View {
         VStack {
@@ -17,10 +20,22 @@ struct ContentView: View {
                 .padding(.bottom, 50)
 
             Text("Hello, world!")
-
-            ToggleImmersiveSpaceButton()
+            
+            Button(isImmersive ? "Close space" : "Open space") {
+                Task {
+                    if isImmersive {
+                        await dismissImmersiveSpace()
+                        isImmersive = false
+                    } else {
+                        await openImmersiveSpace(id: "demo")
+                        isImmersive = true
+                    }
+                    
+                }
+            }
         }
         .padding()
+
     }
 }
 
