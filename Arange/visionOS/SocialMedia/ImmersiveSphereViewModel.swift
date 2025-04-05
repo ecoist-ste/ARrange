@@ -4,6 +4,7 @@
 //
 //  Created by Songyuan Liu on 4/5/25.
 //
+#if os(visionOS)
 import UIKit
 import SwiftUI
 import RealityKit
@@ -196,3 +197,4 @@ extension Double {
 extension Float {
     var degreesToRadians: Float { self * .pi / 180 }
 }
+#endif

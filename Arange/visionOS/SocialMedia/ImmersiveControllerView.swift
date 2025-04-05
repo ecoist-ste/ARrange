@@ -1,3 +1,4 @@
+#if os(visionOS)
 import SwiftUI
 
 struct ImmersiveControllerView: View {
@@ -38,7 +39,9 @@ struct ImmersiveControllerView: View {
             }
         }
         .padding()
+        #if os(visionOS)
         .glassBackgroundEffect()
+        #endif
         .frame(width: 400, height: 600)
     }
 }
@@ -47,3 +50,4 @@ struct ImmersiveControllerView: View {
     ImmersiveControllerView()
         .environmentObject(SphereController())
 }
+#endif
