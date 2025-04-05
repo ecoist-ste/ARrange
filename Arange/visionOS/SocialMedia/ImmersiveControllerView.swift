@@ -42,7 +42,7 @@ struct ImmersiveControllerView: View {
         #if os(visionOS)
         .glassBackgroundEffect()
         #endif
-        .frame(width: 400, height: 600)
+//        .frame(width: 400, height: 600)
     }
 }
 

@@ -23,7 +23,7 @@ class PhotoViewModel: ObservableObject {
     @Published private(set) var imageState: ImageState = .empty
     
     // Stores the transferable JPEG data (ready for Firebase upload)
-    @Published private(set) var profileImageData: Data? = nil
+    @Published private(set) var panoramicImageData: Data? = nil
     
     // Photo picker selection.
     @Published var imageSelection: PhotosPickerItem? = nil {
@@ -33,7 +33,7 @@ class PhotoViewModel: ObservableObject {
                 imageState = .loading(progress)
             } else {
                 imageState = .empty
-                profileImageData = nil
+                panoramicImageData = nil
             }
         }
     }
@@ -48,10 +48,10 @@ class PhotoViewModel: ObservableObject {
                     return
                 }
                 switch result {
-                case .success(let profileImageDataResult?):
-                    self.profileImageData = profileImageDataResult.imageData
+                case .success(let panaromicImageDataResult?):
+                    self.panoramicImageData = panaromicImageDataResult.imageData
                     print("Photo successfully stored.")
-                    if let uiImage = UIImage(data: profileImageDataResult.imageData) {
+                    if let uiImage = UIImage(data: panaromicImageDataResult.imageData) {
                         self.imageState = .success(Image(uiImage: uiImage))
                     } else {
                         self.imageState = .failure(TransferError.importFailed)
@@ -59,18 +59,18 @@ class PhotoViewModel: ObservableObject {
 
                 case .success(nil):
                     self.imageState = .empty
-                    self.profileImageData = nil
+                    self.panoramicImageData = nil
                 case .failure(let error):
                     self.imageState = .failure(error)
-                    self.profileImageData = nil
+                    self.panoramicImageData = nil
                 }
             }
         }
     }
     
-    // TODO: Function to simulate sending the image to Firebase. (Jordan implement this code)
+    // TODO: Function to send the image to Firebase. (Jordan implement this code)
     func sendToFirebase() {
-        if let _ = profileImageData {
+        if let data = panoramicImageData {
             print("Sending image to Vision Pro (Firebase upload triggered).")
         } else {
             print("No image data to send.")
