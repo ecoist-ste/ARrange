@@ -1,9 +1,11 @@
+#if os(visionOS)
 import SwiftUI
 import RealityKit
 import Combine
 
 import SwiftUI
 import RealityKit
+
 
 struct ImmersiveSphereView: View {
     @EnvironmentObject var sphereController: SphereController
@@ -105,3 +107,5 @@ struct ImmersiveSphereView: View {
     ImmersiveSphereView()
         .environmentObject(SphereController())
 }
+
+#endif

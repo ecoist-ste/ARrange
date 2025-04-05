@@ -4,14 +4,17 @@
 //
 //  Created by Songyuan Liu on 4/4/25.
 //
-
+#if os(visionOS)
 import SwiftUI
 import RealityKit
 import RealityKitContent
 
+
 struct ContentView: View {
+    
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
+
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismissWindow) private var dismissWindow
     @State private var isImmersive = false
@@ -43,7 +46,8 @@ struct ContentView: View {
     }
 }
 
+
 #Preview(windowStyle: .automatic) {
     ContentView()
-        .environment(AppModel())
 }
+#endif

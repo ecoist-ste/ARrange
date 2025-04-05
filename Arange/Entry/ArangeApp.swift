@@ -10,9 +10,16 @@ import SwiftUI
 @main
 struct ArangeApp: App {
 
+    #if os(visionOS)
     @State private var sphereController = SphereController()
+    #endif
 
     var body: some Scene {
+        #if os(iOS)
+        WindowGroup {
+            LandingView()
+        }
+        #else
         WindowGroup {
             ContentView()
                 .environmentObject(sphereController)
@@ -29,6 +36,7 @@ struct ArangeApp: App {
             ImmersiveSphereView()
                 .environmentObject(sphereController)
         }
+        #endif
 
      }
 }
