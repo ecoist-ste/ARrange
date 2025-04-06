@@ -3,6 +3,7 @@ import SwiftUI
 
 struct ImmersiveControllerView: View {
     @EnvironmentObject var sphereController: SphereController
+    @EnvironmentObject var immersiveController: ImmersiveSphereViewModel
     private let totalBatches: Int = 4  // With 20 spheres and 5 per batch.
     
     var body: some View {
@@ -22,6 +23,11 @@ struct ImmersiveControllerView: View {
                         .frame(width: 40, height: 40)
                         .padding()
                 }
+                
+                Button("Refresh") {
+                    immersiveController.resetSpheres()
+                }
+                
                 Button {
                     // Rotate clockwise.
                     sphereController.animationDirection = 1
@@ -46,8 +52,8 @@ struct ImmersiveControllerView: View {
     }
 }
 
-#Preview {
-    ImmersiveControllerView()
-        .environmentObject(SphereController())
-}
+//#Preview {
+//    ImmersiveControllerView()
+//        .environmentObject(SphereController())
+//}
 #endif

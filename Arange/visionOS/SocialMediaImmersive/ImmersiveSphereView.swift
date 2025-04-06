@@ -19,8 +19,10 @@ struct ImmersiveSphereView: View {
             content.add(anchor)
             
             // Add all spheres (created in the view model) to the pivot.
+            print(viewModel.spheres.count)
             for sphere in viewModel.spheres {
                 pivot.addChild(sphere)
+                print("add child \(sphere)")
             }
             
             // Set the initial pivot rotation without animation.
@@ -39,6 +41,15 @@ struct ImmersiveSphereView: View {
                     currentBatch: sphereController.currentBatch,
                     animated: true
                 )
+                
+                print(viewModel.spheres.count)
+                
+                for sphere in viewModel.spheres {
+                    if !pivot.children.contains(sphere) {
+                        pivot.addChild(sphere)
+                        print("in update: added child    \(sphere)")
+                    }
+                }
             }
         } placeholder: {
             ProgressView("Loading…")

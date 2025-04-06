@@ -12,18 +12,54 @@ import RealityKitContent
 
 struct FurniturePostView: View {
     
+    let furnitureThumbnails: [[String]] = [
+        [
+            "furniture0", "elegant couch"
+        ],
+        [
+            "furniture1",
+        ],
+        [
+            "furniture2",
+        ],
+        [
+            "furniture3",
+        ],
+        [
+            "furniture4",
+        ],
+        [
+            "furniture5",
+        ],
+        [
+            "furniture6",
+        ],
+        [
+            "furniture7",
+        ],
+        [
+            "furniture8",
+        ],
+        [
+            "furniture9",
+        ],
+    ]
+    
     var body: some View {
         ScrollView(.horizontal) {
             HStack {
-                OnePostView(name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
-                OnePostView(name: "Chair 1", description: "Side table, stone, 40x28cm", price: 83)
-                OnePostView(name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
-                OnePostView(name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
-                OnePostView(name: "Chair 1", description: "Side table, stone, 40x28cm", price: 83)
-                OnePostView(name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
-                OnePostView(name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
-                OnePostView(name: "Chair 1", description: "Side table, stone, 40x28cm", price: 83)
-                OnePostView(name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
+                ForEach(furnitureThumbnails, id: \.self) { thumbnail in
+                    OnePostView(name: thumbnail[0], description: "Side table, stone, 40x28cm", price: 83)
+                }
+//                OnePostView(name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
+//                OnePostView(name: "Chair 1", description: "Side table, stone, 40x28cm", price: 83)
+//                OnePostView(name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
+//                OnePostView(name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
+//                OnePostView(name: "Chair 1", description: "Side table, stone, 40x28cm", price: 83)
+//                OnePostView(name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
+//                OnePostView(name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
+//                OnePostView(name: "Chair 1", description: "Side table, stone, 40x28cm", price: 83)
+//                OnePostView(name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
             }
             
         }
