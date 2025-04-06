@@ -4,6 +4,8 @@
 //
 //  Created by Songyuan Liu on 4/5/25.
 //
+
+#if os(visionOS)
 import SwiftUI
 import RealityKit
 import RealityKitContent
@@ -170,3 +172,5 @@ paired with plush, foam-filled cushions upholstered in soft gray fabric.
         .environmentObject(AppState())
 }
 
+
+#endif

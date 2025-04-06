@@ -4,6 +4,7 @@
 //
 //  Created by Songyuan Liu on 4/5/25.
 //
+#if os(visionOS)
 
 import SwiftUI
 
@@ -58,3 +59,4 @@ enum TabItem: CaseIterable {
 #Preview {
     TabControllerView()
 }
+#endif

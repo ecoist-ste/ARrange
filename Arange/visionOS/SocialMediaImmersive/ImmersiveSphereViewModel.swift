@@ -155,7 +155,7 @@ class ImmersiveSphereViewModel: ObservableObject {
                         print("Failed to load image named \(imagePath)")
                         return
                     }
-                    
+                     
                     
                     let width = image.size.width
                     let height = image.size.height
@@ -167,7 +167,10 @@ class ImmersiveSphereViewModel: ObservableObject {
                         result = self.downscaleAndLoadTexture(for: image, imagePath: imagePath, maxDimension: maxDimension)
                     } else {
                         do {
-                            result = try TextureResource.load(named: imagePath)
+                            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(self.demoImages.firstIndex(of: imagePath) ?? 0)_temp.png")
+                            try data!.write(to: tempURL)
+                            
+                            result = try TextureResource.load(contentsOf: tempURL)
                         } catch {
                             print("Failed to load texture named \(imagePath): \(error)")
                             return

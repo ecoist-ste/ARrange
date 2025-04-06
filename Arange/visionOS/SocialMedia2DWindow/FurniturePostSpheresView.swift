@@ -4,6 +4,7 @@
 //
 //  Created by Songyuan Liu on 4/5/25.
 //
+#if os(visionOS)
 
 import SwiftUI
 
@@ -39,3 +40,5 @@ struct FurniturePostSpheresView: View {
             
     }
 }
+
+#endif
