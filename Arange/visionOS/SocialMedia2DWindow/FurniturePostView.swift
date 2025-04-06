@@ -5,6 +5,8 @@
 //  Created by Songyuan Liu on 4/5/25.
 //
 
+#if os(visionOS)
+
 import SwiftUI
 import RealityKit
 import RealityKitContent
@@ -198,3 +200,5 @@ struct OnePostView: View {
         }
     }
 }
+
+#endif

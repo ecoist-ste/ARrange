@@ -29,11 +29,11 @@ class ImmersiveSphereViewModel: ObservableObject {
                                 "demo5",
                                 "demo6",
                                 "demo7",
-                                "demo8",
-                                "demo9",
-                                "demo10",
-                                "demo11",
-                                "demo12",]
+                                "demo8"]
+//                                "demo9",
+//                                "demo10",
+//                                "demo11",
+//                                "demo12",]
     
     var imageTextures: [String: TextureResource] = [:]
     
