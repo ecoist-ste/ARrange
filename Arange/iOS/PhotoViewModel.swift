@@ -8,9 +8,8 @@
 import SwiftUI
 import PhotosUI
 import CoreTransferable
-
-import MongoSwift
-import NIO
+import FirebaseCore
+import FirebaseStorage
 
 @MainActor
 class PhotoViewModel: ObservableObject {
@@ -84,7 +83,7 @@ class PhotoViewModel: ObservableObject {
             let testRef = storageRef.child("images/test.jpg")
 
             // Upload the file to the path "images/rivers.jpg"
-            let uploadTask = riversRef.putData(data, metadata: nil) { (metadata, error) in
+            let uploadTask = testRef.putData(data, metadata: nil) { (metadata, error) in
               guard let metadata = metadata else {
                 // Uh-oh, an error occurred!
                 print("Error Occured")
@@ -93,7 +92,7 @@ class PhotoViewModel: ObservableObject {
               // Metadata contains file metadata such as size, content-type.
               let size = metadata.size
               // You can also access to download URL after upload.
-              riversRef.downloadURL { (url, error) in
+              testRef.downloadURL { (url, error) in
                 guard let downloadURL = url else {
                   // Uh-oh, an error occurred!
                   return
