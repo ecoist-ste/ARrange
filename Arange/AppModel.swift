@@ -4,7 +4,7 @@
 //
 //  Created by Songyuan Liu on 4/4/25.
 //
-
+import Foundation
 import SwiftUI
 
 /// Maintains app-wide state
@@ -18,4 +18,5 @@ class AppModel {
         case open
     }
     var immersiveSpaceState = ImmersiveSpaceState.closed
+
 }

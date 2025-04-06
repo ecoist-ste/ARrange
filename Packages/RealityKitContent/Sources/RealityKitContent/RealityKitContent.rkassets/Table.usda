@@ -1,0 +1,22 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "Reality Composer Pro Version 2.0 (448.100.13)"
+    }
+    defaultPrim = "Root"
+    metersPerUnit = 1
+    upAxis = "Y"
+)
+
+def Xform "Root"
+{
+    def "Folding_Table" (
+        active = true
+        prepend references = @Folding_Table.usdz@
+    )
+    {
+        float3 xformOp:scale = (0.02, 0.02, 0.02)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+}
+
