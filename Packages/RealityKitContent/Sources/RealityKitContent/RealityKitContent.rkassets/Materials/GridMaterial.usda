@@ -212,5 +212,15 @@ def Xform "Root"
             int ui:nodegraph:node:stackingOrder = 1363
         }
     }
+
+    def "elegant_couch" (
+        active = true
+        prepend references = @../elegant_couch.usdz@
+    )
+    {
+        float3 xformOp:scale = (0.01, 0.01, 0.01)
+        float3 xformOp:translate = (0.0034501157, 0, 0.002390623)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
 }
 

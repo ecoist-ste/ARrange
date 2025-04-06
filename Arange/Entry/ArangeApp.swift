@@ -11,7 +11,9 @@ import SwiftUI
 struct ArangeApp: App {
 
     #if os(visionOS)
-    @State private var sphereController = SphereController()
+    @StateObject private var sphereController = SphereController()
+    @StateObject private var appState = AppState()
+    @StateObject private var furnitureViewModel = FurnitureViewModel()
     #endif
 
     var body: some Scene {
@@ -19,10 +21,13 @@ struct ArangeApp: App {
         WindowGroup {
             LandingView()
         }
+        
         #else
         WindowGroup {
-            ContentView()
+            LaunchView()
                 .environmentObject(sphereController)
+                .environmentObject(appState)
+                .environmentObject(furnitureViewModel)
         }
         
         WindowGroup(id: "ImmersiveController") {
@@ -30,11 +35,16 @@ struct ArangeApp: App {
                 .environmentObject(sphereController)
         }
         .defaultSize(CGSize(width: 400, height: 600))
-                    
         
-        ImmersiveSpace(id: "demo") {
+        ImmersiveSpace(id: "ImmersiveSphereView") {
             ImmersiveSphereView()
                 .environmentObject(sphereController)
+        }
+        
+        ImmersiveSpace(id: "PreviewFurniture") {
+            FurniturePlacementView()
+                .environmentObject(appState)
+                
         }
         #endif
 
