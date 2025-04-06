@@ -58,8 +58,9 @@ class ImmersiveSphereViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     for item in result.items {
                         // The items under storageReference.
-                        print("Item: \(item.fullPath)")
-                        self.demoImages.append(item.fullPath)
+                        if (!self.demoImages.contains(item.fullPath)) {
+                            self.demoImages.append(item.fullPath)
+                        }
                     }
                 }
             } catch {
