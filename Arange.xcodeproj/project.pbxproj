@@ -18,8 +18,8 @@
 		5BA3A6C92DA21881007C2F7B /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5BA3A6C82DA21881007C2F7B /* FirebaseCrashlytics */; };
 		5BA3A6CB2DA21881007C2F7B /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 5BA3A6CA2DA21881007C2F7B /* FirebaseDatabase */; };
 		5BA3A6CD2DA21881007C2F7B /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = 5BA3A6CC2DA21881007C2F7B /* FirebaseDynamicLinks */; };
-		5BA3A6CF2DA21881007C2F7B /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5BA3A6CE2DA21881007C2F7B /* FirebaseFirestore */; };
-		5BA3A6D12DA21881007C2F7B /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 5BA3A6D02DA21881007C2F7B /* FirebaseFirestoreCombine-Community */; };
+		5BA3A6CF2DA21881007C2F7B /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = 5BA3A6CE2DA21881007C2F7B /* FirebaseFirestore */; };
+		5BA3A6D12DA21881007C2F7B /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = 5BA3A6D02DA21881007C2F7B /* FirebaseFirestoreCombine-Community */; };
 		5BA3A6D32DA21881007C2F7B /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 5BA3A6D22DA21881007C2F7B /* FirebaseFunctions */; };
 		5BA3A6D52DA21881007C2F7B /* FirebaseFunctionsCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 5BA3A6D42DA21881007C2F7B /* FirebaseFunctionsCombine-Community */; };
 		5BA3A6D72DA21881007C2F7B /* FirebaseInAppMessaging-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 5BA3A6D62DA21881007C2F7B /* FirebaseInAppMessaging-Beta */; };
