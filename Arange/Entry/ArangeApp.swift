@@ -21,7 +21,7 @@ struct ArangeApp: App {
         }
         #else
         WindowGroup {
-            ContentView()
+            LaunchView()
                 .environmentObject(sphereController)
         }
         

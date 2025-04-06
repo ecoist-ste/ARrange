@@ -11,13 +11,13 @@ import PhotosUI
 struct LandingView: View {
     var body: some View {
         NavigationStack {
-            ContentView()
+            LaunchView()
         }
         
     }
 }
 
-struct ContentView: View {
+struct LaunchView: View {
     @StateObject private var viewModel = PhotoViewModel()
     
     var body: some View {
