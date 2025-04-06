@@ -15,12 +15,13 @@ struct FurniturePostSpheresView: View {
     @State private var isImmersive = false
     
     var body: some View {
+        
         Image("social_media_immersive_sphere")
             .resizable()
             .clipShape(RoundedRectangle(cornerRadius: 20))
             .frame(height: 450)
             .aspectRatio(contentMode: .fit)
-            .ornament(attachmentAnchor: .scene(.bottomFront), ornament: {
+            .ornament(attachmentAnchor: .scene(.center), ornament: {
                 Button("View Immersive Furniture Posts") {
                     Task {
                         if isImmersive {
@@ -34,7 +35,7 @@ struct FurniturePostSpheresView: View {
                         }
                     }
                     
-                }.buttonStyle(.bordered)
+                }
             })
             
     }
