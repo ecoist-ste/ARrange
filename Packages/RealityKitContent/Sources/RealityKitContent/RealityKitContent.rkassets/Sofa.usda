@@ -1,0 +1,19 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "Reality Composer Pro Version 2.0 (448.100.13)"
+    }
+    defaultPrim = "a_simplistic_night_st_0405235725_texture"
+    metersPerUnit = 1
+    upAxis = "Y"
+)
+
+def "a_simplistic_night_st_0405235725_texture" (
+    active = true
+    prepend references = @a_simplistic_night_st_0405235725_texture.usdz@</mesh1>
+)
+{
+    float3 xformOp:translate = (-0.0004936103, 0, 0.011868954)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+}
+

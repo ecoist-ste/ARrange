@@ -42,13 +42,13 @@ paired with plush, foam-filled cushions upholstered in soft gray fabric.
                         Button(isImmersive ? "Finish preview" : "Preview in your space") {
                             Task {
                                 if isImmersive {
-                                    dismissWindow(id: "volumetricWindow")
-//                                    await dismissImmersiveSpace()
-//                                    appState.isImmersive = false
+//                                    dismissWindow(id: "volumetricWindow")
+                                    await dismissImmersiveSpace()
+                                    appState.isImmersive = false
                                 } else {
-                                    openWindow(id: "volumetricWindow")
-//                                    await openImmersiveSpace(id: "PreviewFurniture")
-//                                    appState.isImmersive = true
+//                                    openWindow(id: "volumetricWindow")
+                                    await openImmersiveSpace(id: "PreviewFurniture")
+                                    appState.isImmersive = true
                                 }
                                 
                                 isImmersive.toggle()
