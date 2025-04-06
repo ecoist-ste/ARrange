@@ -21,8 +21,8 @@ struct FurniturePostSpheresView: View {
             .clipShape(RoundedRectangle(cornerRadius: 20))
             .frame(height: 450)
             .aspectRatio(contentMode: .fit)
-            .ornament(attachmentAnchor: .scene(.center), ornament: {
-                Button("View Immersive Furniture Posts") {
+            .overlay(alignment: .center, content: {
+                Button(isImmersive ? "Close Immersive Space" : "View Immersive Furniture Posts") {
                     Task {
                         if isImmersive {
                             await dismissImmersiveSpace()
@@ -34,9 +34,29 @@ struct FurniturePostSpheresView: View {
                             isImmersive = true
                         }
                     }
-                    
                 }
+                .offset(y: 90)
             })
+//            .ornament(attachmentAnchor: .scene(.bottom), ornament: {
+//                Button("View Immersive Furniture Posts") {
+//                    Task {
+//                        if isImmersive {
+//                            await dismissImmersiveSpace()
+//                            dismissWindow(id: "ImmersiveController")
+//                            isImmersive = false
+//                        } else {
+//                            await openImmersiveSpace(id: "ImmersiveSphereView")
+//                            openWindow(id: "ImmersiveController")
+//                            isImmersive = true
+//                        }
+//                    }
+//                    
+//                }
+//            })
             
     }
+}
+
+#Preview {
+    FurniturePostSpheresView()
 }

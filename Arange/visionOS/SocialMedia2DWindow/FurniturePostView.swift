@@ -9,89 +9,130 @@ import SwiftUI
 import RealityKit
 import RealityKitContent
 
-
 struct FurniturePostView: View {
-    
+    // Each inner array: [image, name, short description, more description]
     let furnitureThumbnails: [[String]] = [
         [
             "furniture0",
             "elegant couch",
-            "This elegant couch is designed with refined comfort and sophisticated style in mind. It features plush cushions and sleek lines that make it an ideal centerpiece for any modern living room. The design effortlessly balances luxury with everyday comfort."
+            "Refined and plush centerpiece",
+            "This elegant couch showcases timeless sophistication with its graceful curves and plush cushions. Designed for both comfort and class, it's the perfect statement piece for upscale living rooms or refined lounge areas."
         ],
         [
             "furniture1",
             "errie lamp",
-            "This errie lamp boasts a uniquely intriguing design that captivates the eye. Its unconventional form and mysterious glow add an unexpected twist to traditional lighting. The lamp serves as both a functional piece and a conversation starter in any space."
+            "Mysterious ambient lighting",
+            "This eerie lamp emits a soft, mysterious glow that adds an intriguing ambiance to any room. With its otherworldly design and shadowy charm, it’s ideal for creating a moody and atmospheric vibe."
         ],
         [
             "furniture2",
             "cozy armchair",
-            "This cozy armchair is crafted to offer maximum comfort and a welcoming vibe. Its soft fabric and inviting design make it perfect for quiet reading nooks or relaxing afternoons. The chair's timeless appeal complements both modern and classic interiors."
+            "Soft and inviting seat",
+            "This cozy armchair invites you to sink in and relax with its deep seat and soft upholstery. Designed for warmth and comfort, it’s perfect for reading corners, fireside chats, or lazy Sunday afternoons."
         ],
         [
             "furniture3",
             "modern side table",
-            "This modern side table features a minimalist design that enhances contemporary decor. It is crafted with clean lines and a functional silhouette to provide both style and practicality. Ideal for accentuating living spaces or as an auxiliary surface in any room."
+            "Minimalist and functional",
+            "This modern side table features clean lines and a minimalist profile that complements contemporary decor. Functional yet stylish, it's perfect for holding your favorite books, plants, or a cup of coffee."
         ],
         [
             "furniture4",
             "wooden chair",
-            "This wooden chair exudes natural charm and sturdy elegance. Its classic design and rich wood finish make it a versatile addition to any dining or living space. The chair combines timeless aesthetics with modern durability."
+            "Classic and sturdy",
+            "This wooden chair combines sturdy craftsmanship with rustic charm. With its solid frame and classic silhouette, it's a versatile addition to any dining area, study, or cozy nook."
         ],
         [
             "furniture5",
             "game chair",
-            "This game chair is engineered for extended comfort during intense gaming sessions. Its ergonomic design and adjustable features provide the perfect balance of support and style. The chair not only enhances gameplay but also adds a modern flair to your setup."
+            "Ergonomic and sleek",
+            "This game chair is built for performance and comfort, featuring an ergonomic design and sleek, modern look. Whether you're gaming for hours or working from home, it supports your posture while looking sharp."
         ],
         [
             "furniture6",
             "lean chair",
-            "This lean chair is defined by its streamlined silhouette and minimalist appeal. It offers a comfortable seating option without compromising on style. The chair's contemporary design makes it a fitting choice for modern interiors."
+            "Slim and modern",
+            "This lean chair is designed with simplicity in mind, offering a lightweight frame and slender profile. Ideal for small spaces or minimalist interiors, it provides style without the bulk."
         ],
         [
             "furniture7",
             "white couch",
-            "This white couch offers a fresh and sophisticated look that brightens any space. Its crisp design and inviting seating provide a perfect blend of elegance and comfort. A versatile piece that works well in both modern and classic settings."
+            "Bright and modern",
+            "This white couch brings a fresh, airy feel to any room with its clean lines and neutral tone. Its soft cushions and modern silhouette make it both stylish and welcoming for everyday living."
         ],
         [
             "furniture8",
             "study lamp",
-            "This study lamp delivers focused illumination with a chic and modern design. It is thoughtfully designed to provide optimal lighting for reading or working, making it an essential piece for any study area. The lamp combines functionality with a sleek aesthetic."
+            "Focused desk lighting",
+            "This study lamp provides focused light with an adjustable design that’s perfect for desks and workstations. Its sleek finish and compact form make it a must-have for productivity and modern decor."
         ],
         [
             "furniture9",
             "homey lamp",
-            "This homey lamp creates a warm and inviting atmosphere with its gentle glow. Its design is both practical and charming, perfect for adding a cozy touch to any room. The lamp is an excellent choice for creating a comfortable and relaxed home environment."
+            "Warm and cozy glow",
+            "This homey lamp adds a gentle, comforting glow to your space. With its warm light and charming design, it's perfect for bedrooms, reading corners, or any place where coziness is key."
         ]
     ]
-
+    
+    // Create a state array to store the favorite status for each furniture item.
+    @State private var liked: [Bool]
+    
+    init() {
+        // Initialize the liked array with false for each item.
+        self.liked = Array(repeating: false, count: furnitureThumbnails.count)
+    }
+    
     var body: some View {
         ScrollView(.horizontal) {
             HStack {
-                ForEach(furnitureThumbnails.indices, id: \.self) { thumbnailIndex in
-                    OnePostView(image: furnitureThumbnails[thumbnailIndex][0], name:  furnitureThumbnails[thumbnailIndex][1], description:  furnitureThumbnails[thumbnailIndex][2], price: Double.random(in: 66.35..<900.35))
+                // Wrap the range in Array and annotate the type explicitly.
+                ForEach(Array(0..<furnitureThumbnails.count), id: \.self) { (index: Int) in
+                    let item = furnitureThumbnails[index]
+                    let currentPrice = Double.random(in: 66.35..<900.35)
+                    let heartBinding = Binding<Bool>(
+                        get: { self.liked[index] },
+                        set: { self.liked[index] = $0 }
+                    )
+                    OnePostView(
+                        image: item[0],
+                        name: item[1],
+                        description: item[2],
+                        moreDescription: item[3],
+                        price: currentPrice,
+                        heartIsTapped: heartBinding
+                    )
                 }
             }
-            
         }
     }
+
+
 }
 
 
+
 struct OnePostView: View {
-    
     @State private var presentSheet = false
-    
+    @Binding var heartIsTapped: Bool
+
     let image: String
     let name: String
     let description: String
+    let moreDescription: String
     let price: Double
-    
-    init(image: String = "DefaultFurnitureImage", name: String, description: String, price: Double) {
+
+    init(image: String = "DefaultFurnitureImage",
+         name: String,
+         description: String,
+         moreDescription: String,
+         price: Double,
+         heartIsTapped: Binding<Bool>) {
         self.image = image
         self.name = name
         self.description = description
+        self.moreDescription = moreDescription
         self.price = price
+        self._heartIsTapped = heartIsTapped
     }
     
     var body: some View {
@@ -107,16 +148,23 @@ struct OnePostView: View {
                 .sheet(isPresented: $presentSheet, onDismiss: {
                     presentSheet = false
                 }, content: {
-                    FurniturePostDetailView(image: image, name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
-                        .frame(width: 1000)
+                    FurniturePostDetailView(
+                        image: image,
+                        name: name,
+                        description: description,
+                        moreDescription: moreDescription,
+                        price: price,
+                        heartIsTapped: $heartIsTapped
+                    )
+                    .frame(width: 1000)
                 })
             
             VStack(alignment: .leading) {
                 Text(name)
                     .font(.title)
                 Text(description)
-                    .frame(maxWidth: 300, alignment: .leading) // constrain width
-                    .fixedSize(horizontal: false, vertical: true) // allow wrapping
+                    .frame(maxWidth: 300, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .padding(.vertical)
             
@@ -128,13 +176,15 @@ struct OnePostView: View {
                 Spacer()
                 
                 Button {
-                    // heart action
+                    withAnimation {
+                        heartIsTapped.toggle()
+                    }
                 } label: {
-                    Image(systemName: "heart")
+                    Image(systemName: heartIsTapped ? "heart.fill" : "heart")
                 }
                 
                 Button {
-                    // magnifying glass action
+                    // Magnifying glass action (if any)
                 } label: {
                     Image(systemName: "magnifyingglass.circle.fill")
                 }
@@ -144,12 +194,9 @@ struct OnePostView: View {
         .padding(.horizontal, 20)
         .hoverEffect(.highlight)
         .hoverEffect { effect, isActive, _ in
-            effect.scaleEffect(isActive ? 1.05: 1.0)
+            effect.scaleEffect(isActive ? 1.05 : 1.0)
         }
     }
 }
 
 
-#Preview {
-    FurniturePostView()
-}
