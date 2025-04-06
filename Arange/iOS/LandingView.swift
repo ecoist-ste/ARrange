@@ -74,6 +74,14 @@ struct LaunchView: View {
              
             }
             .padding()
+            .sheet(isPresented: $viewModel.uploading) {
+                Text("Uploading...")
+                    .padding()
+            }
+            .sheet(isPresented: $viewModel.onError) {
+                Text("Uploading Error")
+                    .padding()
+            }
 
     }
 }

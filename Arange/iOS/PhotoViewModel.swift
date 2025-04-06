@@ -26,6 +26,9 @@ class PhotoViewModel: ObservableObject {
     
     @Published private(set) var imageState: ImageState = .empty
     
+    @Published var uploading: Bool = false
+    @Published var onError: Bool = false
+    
     // Stores the transferable JPEG data (ready for Firebase upload)
     @Published private(set) var panoramicImageData: Data? = nil
     
@@ -60,7 +63,7 @@ class PhotoViewModel: ObservableObject {
                     } else {
                         self.imageState = .failure(TransferError.importFailed)
                     }
-
+                    
                 case .success(nil):
                     self.imageState = .empty
                     self.panoramicImageData = nil
@@ -75,41 +78,39 @@ class PhotoViewModel: ObservableObject {
     // TODO: Function to send the image to Firebase. (Jordan implement this code)
     func sendToFirebase() {
         if let data = panoramicImageData {
+            uploading = true
             // Get a reference to the storage service using the default Firebase App
             let storage = Storage.storage()
-
+            
             // Create a storage reference from our storage service
             let storageRef = storage.reference()
             
             Task {
-                let storageReference = storageRef.child("images/uid")
+                let storageReference = storageRef.child("images")
                 do {
                     let result = try await storageReference.listAll()
+                    print(result.items)
                     let count = result.items.count
                     
                     let testRef = storageRef.child("images/\(count + 1).jpg")
                     
-                    let uploadTask = testRef.putData(data, metadata: nil) { (metadata, error) in
-                      guard let metadata = metadata else {
-                        // Uh-oh, an error occurred!
-                        print("Error Occured")
-                        return
-                      }
-                      // Metadata contains file metadata such as size, content-type.
-                      let size = metadata.size
-                      // You can also access to download URL after upload.
-                      testRef.downloadURL { (url, error) in
-                        guard let downloadURL = url else {
-                          // Uh-oh, an error occurred!
-                          return
+                    _ = testRef.putData(data, metadata: nil) { (metadata, error) in
+                        guard let metadata = metadata else {
+                            // Uh-oh, an error occurred!
+                            print("Error Occured")
+                            return
                         }
-                      }
+                        print("Successfully uploaded image to: images/\(count + 1).jpg")
+                        self.uploading = false
                     }
                 } catch {
-                  // ...
+                    // ...
+                    print("Error Occured")
+                    self.uploading = false
+                    self.onError = true
                 }
             }
-        
+            
         } else {
             print("No image data to send.")
         }

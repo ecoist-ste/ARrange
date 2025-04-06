@@ -4,7 +4,6 @@
 //
 //  Created by Songyuan Liu on 4/5/25.
 //
-
 import SwiftUI
 
 struct FurniturePostSpheresView: View {

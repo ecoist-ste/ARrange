@@ -198,5 +198,3 @@ struct OnePostView: View {
         }
     }
 }
-
-
