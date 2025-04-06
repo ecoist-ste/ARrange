@@ -36,7 +36,7 @@ struct ArangeApp: App {
         }
         .defaultSize(CGSize(width: 400, height: 600))
         
-        ImmersiveSpace(id: "demo") {
+        ImmersiveSpace(id: "ImmersiveSphereView") {
             ImmersiveSphereView()
                 .environmentObject(sphereController)
         }

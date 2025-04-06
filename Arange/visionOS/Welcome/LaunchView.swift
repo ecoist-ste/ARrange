@@ -66,7 +66,7 @@ struct LaunchView: View {
                 }
                 
                 
-                Text("ange")
+                Text("range")
                     .font(.system(size: 75, weight: .ultraLight, design: .rounded))
                     .foregroundColor(.black)
                 

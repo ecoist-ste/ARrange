@@ -12,7 +12,7 @@ struct MyProjectsView: View {
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     @EnvironmentObject var furnitureModel: FurnitureViewModel
-    @State private var selectedItem: String = "Chair"
+    @State private var selectedItem: String = "Table"
     @State private var isImmersive = false
     
     let items = ["Chair", "Sofa", "Table"]
@@ -62,10 +62,13 @@ struct MyProjectsView: View {
                         Task {
                             if isImmersive {
                                 await dismissImmersiveSpace()
+                                isImmersive = false
                             } else {
                                 await openImmersiveSpace(id: "PreviewFurniture")
+                                isImmersive = true
                             }
                         }
+                        
                     }
                     .padding()
                     .buttonStyle(.automatic)
