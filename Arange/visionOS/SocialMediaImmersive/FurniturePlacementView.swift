@@ -11,11 +11,15 @@ import RealityKitContent
 
 struct FurniturePlacementView: View {
     
-    let entityNamePath: String = "elegant_couch"
+    var entityNamePath: String {
+        appState.furnitureNameToBePreviewed
+    }
+    @EnvironmentObject var appState: AppState
     @State private var enlarge = false
     @State private var dragOffset: SIMD3<Float> = .zero
     @State private var furniturePosition: SIMD3<Float> = SIMD3<Float>(0, 0, -1.5)
     @State private var isLocked = true
+    
     
     var body: some View {
         RealityView { content, attachments in

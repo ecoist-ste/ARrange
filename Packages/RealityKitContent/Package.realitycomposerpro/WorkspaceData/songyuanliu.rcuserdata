@@ -1,9 +1,13 @@
 {
   "advancedEditorSelectedIdentifier" : "ProjectBrowser",
   "openSceneRelativePaths" : [
-    "Materials\/GridMaterial.usda"
+    "Materials\/GridMaterial.usda",
+    "Chair.usda"
   ],
   "recentIdentifiers" : {
+    "2A52A3DB-28DF-46D1-932A-D13C1C10CC2F" : [
+
+    ],
     "39779E7A-D91E-4408-BCE6-435CE5013986" : [
 
     ],
@@ -234,6 +238,30 @@
         ]
       }
     ],
+    "2A52A3DB-28DF-46D1-932A-D13C1C10CC2F" : [
+      {
+        "date" : 765612535.589068,
+        "title" : "Untitled",
+        "transform" : [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0.8658365,
+          -0.50032693,
+          0,
+          0,
+          0.50032693,
+          0.8658365,
+          0,
+          -0.909398,
+          2.699814,
+          4.2358613,
+          1
+        ]
+      }
+    ],
     "39779E7A-D91E-4408-BCE6-435CE5013986" : [
       {
         "date" : 765606803.539019,
@@ -418,5 +446,5 @@
   "sceneViewportBackgroundColors" : {
 
   },
-  "selectedSceneRelativePath" : "Materials\/GridMaterial.usda"
+  "selectedSceneRelativePath" : "Chair.usda"
 }

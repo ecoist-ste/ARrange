@@ -46,27 +46,27 @@ class ImmersiveSphereViewModel: ObservableObject {
     @Published var originalPos: SIMD3<Float> = .zero
     
     init() {
-//        Task {
-//            let ref = Storage.storage().reference().child("images")
-//            do {
-//                let result = try await ref.listAll()
-//                
-//                DispatchQueue.main.async {
-//                    for item in result.items {
-//                        // The items under storageReference.
-//                        print("Item: \(item.fullPath)")
-//                        self.demoImages.append(item.fullPath)
-//                    }
-//                }
-//            } catch {
-//                // ...
-//                print("Error fetching items")
-//            }
-//        }
-        self.spheres = self.arrangeSpheres()
+        resetSpheres()
     }
     
     func resetSpheres() {
+        Task {
+            let ref = Storage.storage().reference().child("images")
+            do {
+                let result = try await ref.listAll()
+                
+                DispatchQueue.main.async {
+                    for item in result.items {
+                        // The items under storageReference.
+                        print("Item: \(item.fullPath)")
+                        self.demoImages.append(item.fullPath)
+                    }
+                }
+            } catch {
+                // ...
+                print("Error fetching items")
+            }
+        }
         self.spheres = self.arrangeSpheres()
     }
     
@@ -117,7 +117,6 @@ class ImmersiveSphereViewModel: ObservableObject {
     /// Main function to create a skybox entity using the given image. It uses the helper functions
     /// to load the texture (downscaling if necessary) and then creates the entity.
     func createSkybox(using imagePath: String = "demo1", maxDimension: CGFloat = 8193, sphereRadius: Float) -> Entity? {
-        print("enter createSkybox() \(imagePath)")
         print(imageTextures)
         
         
@@ -126,10 +125,8 @@ class ImmersiveSphereViewModel: ObservableObject {
                 imageTextures[imagePath] = texture
             }
         } else {
-            print("createSkybox: texture is \(imageTextures[imagePath]) ")
             if let texture = imageTextures[imagePath] {
                 let containerEntity = createContainerEntity(with: sphereRadius, texture: texture)
-                print("return container Entity")
                 return containerEntity
             }
         }

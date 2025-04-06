@@ -47,6 +47,7 @@ struct ArangeApp: App {
         ImmersiveSpace(id: "ImmersiveSphereView") {
             ImmersiveSphereView()
                 .environmentObject(sphereController)
+                .environmentObject(immersiveSphereViewModel)
         }
         
         ImmersiveSpace(id: "PreviewFurniture") {

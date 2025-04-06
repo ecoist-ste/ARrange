@@ -9,10 +9,10 @@ import RealityKit
 import RealityKitContent
 
 struct FurniturePostDetailView: View {
+    @EnvironmentObject private var appState: AppState
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
-    @EnvironmentObject private var appState: AppState
     @State private var isImmersive = false
     @State private var count = 1
     
@@ -56,6 +56,7 @@ paired with plush, foam-filled cushions upholstered in soft gray fabric.
                                     //                                    openWindow(id: "volumetricWindow")
                                     await openImmersiveSpace(id: "PreviewFurniture")
                                     appState.isImmersive = true
+                                    appState.furnitureNameToBePreviewed = name
                                 }
                                 
                                 isImmersive.toggle()
