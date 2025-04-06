@@ -9,6 +9,10 @@ import SwiftUI
 import PhotosUI
 import CoreTransferable
 
+
+import FirebaseCore
+import FirebaseStorage
+
 @MainActor
 class PhotoViewModel: ObservableObject {
     
@@ -71,7 +75,41 @@ class PhotoViewModel: ObservableObject {
     // TODO: Function to send the image to Firebase. (Jordan implement this code)
     func sendToFirebase() {
         if let data = panoramicImageData {
-            print("Sending image to Vision Pro (Firebase upload triggered).")
+            // Get a reference to the storage service using the default Firebase App
+            let storage = Storage.storage()
+
+            // Create a storage reference from our storage service
+            let storageRef = storage.reference()
+            
+            Task {
+                let storageReference = storageRef.child("images/uid")
+                do {
+                    let result = try await storageReference.listAll()
+                    let count = result.items.count
+                    
+                    let testRef = storageRef.child("images/\(count + 1).jpg")
+                    
+                    let uploadTask = testRef.putData(data, metadata: nil) { (metadata, error) in
+                      guard let metadata = metadata else {
+                        // Uh-oh, an error occurred!
+                        print("Error Occured")
+                        return
+                      }
+                      // Metadata contains file metadata such as size, content-type.
+                      let size = metadata.size
+                      // You can also access to download URL after upload.
+                      testRef.downloadURL { (url, error) in
+                        guard let downloadURL = url else {
+                          // Uh-oh, an error occurred!
+                          return
+                        }
+                      }
+                    }
+                } catch {
+                  // ...
+                }
+            }
+        
         } else {
             print("No image data to send.")
         }

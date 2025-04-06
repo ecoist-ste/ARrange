@@ -10,6 +10,9 @@ import SwiftUI
 import RealityKit
 import Combine
 
+import FirebaseCore
+import FirebaseStorage
+
 // MARK: - ImmersiveSphereViewModel
 class ImmersiveSphereViewModel: ObservableObject {
     // Business logic and layout constants.
@@ -19,7 +22,7 @@ class ImmersiveSphereViewModel: ObservableObject {
     let animationDuration: Float = 1.0
     let pivotRadius: Float = 1.5
     let sphereHeight: Float = 1.5
-    let demoImages: [String] = ["demo1",
+    var demoImages: [String] = ["demo1",
                                 "demo2",
                                 "demo3",
                                 "demo4",
@@ -32,6 +35,8 @@ class ImmersiveSphereViewModel: ObservableObject {
                                 "demo11",
                                 "demo12",]
     
+    var imageTextures: [String: TextureResource] = [:]
+    
     // Array of all 20 spheres.
     @Published var spheres: [Entity] = []
     
@@ -41,23 +46,49 @@ class ImmersiveSphereViewModel: ObservableObject {
     @Published var originalPos: SIMD3<Float> = .zero
     
     init() {
-        self.spheres = arrangeSpheres()
+        resetSpheres()
+    }
+    
+    func resetSpheres() {
+        Task {
+            let ref = Storage.storage().reference().child("images")
+            do {
+                let result = try await ref.listAll()
+                
+                DispatchQueue.main.async {
+                    for item in result.items {
+                        // The items under storageReference.
+                        if (!self.demoImages.contains(item.fullPath)) {
+                            self.demoImages.append(item.fullPath)
+                        }
+                    }
+                }
+            } catch {
+                // ...
+                print("Error fetching items")
+            }
+        }
+        self.spheres = self.arrangeSpheres()
     }
     
     /// Arranges spheres evenly around a circle.
     func arrangeSpheres() -> [Entity] {
+        print("enter arrangeSpheres()")
+        
         var createdSpheres: [Entity] = []
-        for i in 0..<totalSpheres {
+        for i in 0..<self.demoImages.count {
             if let skybox = createSkybox(
                 using: demoImages[i],
                 sphereRadius: sphereRadius
             ) {
                 // Calculate the angle for this sphere.
-                let angle = (2 * Float.pi / Float(totalSpheres)) * Float(i)
+                let angle = (2 * Float.pi / Float(self.demoImages.count)) * Float(i)
                 let x = pivotRadius * sin(angle)
                 let z = -pivotRadius * cos(angle)
                 skybox.transform.translation = SIMD3<Float>(x, sphereHeight, z)
                 createdSpheres.append(skybox)
+                
+                print("append skybox")
             }
         }
         return createdSpheres
@@ -87,36 +118,93 @@ class ImmersiveSphereViewModel: ObservableObject {
     /// Main function to create a skybox entity using the given image. It uses the helper functions
     /// to load the texture (downscaling if necessary) and then creates the entity.
     func createSkybox(using imagePath: String = "demo1", maxDimension: CGFloat = 8193, sphereRadius: Float) -> Entity? {
-        guard let texture = loadTexture(for: imagePath, maxDimension: maxDimension) else {
-            return nil
+        print(imageTextures)
+        
+        
+        if (imageTextures.index(forKey: imagePath) == nil) {
+            if let texture = loadTexture(for: imagePath, maxDimension: maxDimension) {
+                imageTextures[imagePath] = texture
+            }
+        } else {
+            if let texture = imageTextures[imagePath] {
+                let containerEntity = createContainerEntity(with: sphereRadius, texture: texture)
+                return containerEntity
+            }
         }
         
-        let containerEntity = createContainerEntity(with: sphereRadius, texture: texture)
-        return containerEntity
+        return nil
     }
     
     /// Loads a texture from the asset bundle. If the image's dimensions exceed maxDimension,
     /// the image is downscaled and loaded from a temporary file. Otherwise, it is loaded directly.
     func loadTexture(for imagePath: String, maxDimension: CGFloat) -> TextureResource? {
-        guard let image = UIImage(named: imagePath) else {
-            print("Could not load image \(imagePath)")
-            return nil
-        }
-        
-        let width = image.size.width
-        let height = image.size.height
-        let needsDownscale = width > maxDimension || height > maxDimension
-        
-        if needsDownscale {
-            return downscaleAndLoadTexture(for: image, imagePath: imagePath, maxDimension: maxDimension)
+        if (imagePath.contains("/")) {
+            let imageRef = Storage.storage().reference().child(imagePath)
+            
+            print("Entering download data")
+            imageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                if let error = error {
+                    // Uh-oh, an error occurred!
+                    print("Error occured when downloading image: \(error)")
+                } else {
+                    // Data for "images/island.jpg" is returned
+                    print("Got Downloaded Data")
+                    let image = UIImage(data: data!)
+                    
+                    guard let image = image else {
+                        print("Failed to load image named \(imagePath)")
+                        return
+                    }
+                    
+                    
+                    let width = image.size.width
+                    let height = image.size.height
+                    let needsDownscale = width > maxDimension || height > maxDimension
+                    
+                    var result: TextureResource?
+                    
+                    if needsDownscale {
+                        result = self.downscaleAndLoadTexture(for: image, imagePath: imagePath, maxDimension: maxDimension)
+                    } else {
+                        do {
+                            result = try TextureResource.load(named: imagePath)
+                        } catch {
+                            print("Failed to load texture named \(imagePath): \(error)")
+                            return
+                        }
+                    }
+                    
+                    if let result = result {
+                        self.imageTextures[imagePath] = result
+                    }
+                }
+            }
         } else {
-            do {
-                return try TextureResource.load(named: imagePath)
-            } catch {
-                print("Failed to load texture named \(imagePath): \(error)")
+            let image = UIImage(named: imagePath)
+            
+            guard let image = image else {
+                print("Failed to load image named \(imagePath)")
                 return nil
             }
+            
+            
+            let width = image.size.width
+            let height = image.size.height
+            let needsDownscale = width > maxDimension || height > maxDimension
+            
+            if needsDownscale {
+                return downscaleAndLoadTexture(for: image, imagePath: imagePath, maxDimension: maxDimension)
+            } else {
+                do {
+                    return try TextureResource.load(named: imagePath)
+                } catch {
+                    print("Failed to load texture named \(imagePath): \(error)")
+                    return nil
+                }
+            }
         }
+        
+        return nil
     }
 
     /// Downscales the provided image to fit within maxDimension while preserving aspect ratio,
@@ -142,7 +230,7 @@ class ImmersiveSphereViewModel: ObservableObject {
             return nil
         }
         
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(imagePath)_temp.png")
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(demoImages.firstIndex(of: imagePath) ?? 0)_temp.png")
         
         do {
             try data.write(to: tempURL)

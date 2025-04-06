@@ -18,5 +18,7 @@ class AppState: ObservableObject {
     var currentState = WindowState.authentication
     
     var isImmersive = false
+    
+    var furnitureNameToBePreviewed: String = "elegant_couch"
 }
 

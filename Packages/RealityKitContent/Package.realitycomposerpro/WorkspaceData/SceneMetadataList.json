@@ -35,9 +35,33 @@
       }
     ]
   },
+  "2A52A3DB-28DF-46D1-932A-D13C1C10CC2F" : {
+    "objectMetadataList" : [
+      [
+        "2A52A3DB-28DF-46D1-932A-D13C1C10CC2F",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      }
+    ]
+  },
   "39779E7A-D91E-4408-BCE6-435CE5013986" : {
     "objectMetadataList" : [
 
+    ]
+  },
+  "63647B0F-2351-4625-94EA-9DFB44785A60" : {
+    "objectMetadataList" : [
+      [
+        "63647B0F-2351-4625-94EA-9DFB44785A60",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      }
     ]
   },
   "65F6F990-A780-4474-B78B-572E0E4E273D" : {

@@ -9,7 +9,7 @@ import RealityKit
 
 struct ImmersiveSphereView: View {
     @EnvironmentObject var sphereController: SphereController
-    @StateObject var viewModel = ImmersiveSphereViewModel()
+    @EnvironmentObject var viewModel: ImmersiveSphereViewModel
     
     var body: some View {
         RealityView { content in
@@ -19,6 +19,7 @@ struct ImmersiveSphereView: View {
             content.add(anchor)
             
             // Add all spheres (created in the view model) to the pivot.
+            print(viewModel.spheres.count)
             for sphere in viewModel.spheres {
                 pivot.addChild(sphere)
             }
@@ -39,6 +40,14 @@ struct ImmersiveSphereView: View {
                     currentBatch: sphereController.currentBatch,
                     animated: true
                 )
+                
+                pivot.children.removeAll()
+                
+                print(viewModel.spheres.count)
+                for sphere in viewModel.spheres {
+                    pivot.addChild(sphere)
+                    
+                }
             }
         } placeholder: {
             ProgressView("Loading…")
@@ -51,7 +60,7 @@ struct ImmersiveSphereView: View {
         .gesture(
             EnlargeSphereGesture
         )
-
+        
         
         .animation(.easeInOut, value: viewModel.isTapped)
     }
@@ -88,7 +97,7 @@ struct ImmersiveSphereView: View {
                     )
                 } else {
                     let currentTransform = value.entity.transform
-
+                    
                     var newTransform = currentTransform
                     newTransform.translation = viewModel.originalPos
                     value.entity.move(

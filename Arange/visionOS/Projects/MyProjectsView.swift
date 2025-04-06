@@ -9,13 +9,25 @@ import RealityKit
 import RealityKitContent
 
 struct MyProjectsView: View {
+    @EnvironmentObject private var appState: AppState
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     @EnvironmentObject var furnitureModel: FurnitureViewModel
-    @State private var selectedItem: String = "Table"
+    @State private var selectedItem: String = "Funky Sofa"
     @State private var isImmersive = false
     
-    let items = ["Chair", "Sofa", "Table"]
+    let items = ["Funky Sofa",
+                 "Chair",
+                 "modern_table",
+                 "errie lamp",
+                 "cozy armchair",
+                 "modern side table",
+                 "wooden chair",
+                 "game chair",
+                 "lean chair",
+                 "white couch",
+                 "study lamp",
+                 "homey lamp"]
         
         var body: some View {
             NavigationSplitView {
@@ -28,18 +40,21 @@ struct MyProjectsView: View {
                     Spacer()
                     
                     List(items, id: \.self) { item in
+                        Divider()
                         Button(action: {
                             selectedItem = item
                         }) {
                             HStack {
+                                Spacer()
                                 Text(item)
-                                if item == selectedItem {
-                                    Spacer()
-                                    Image(systemName: "checkmark")
-                                }
+                                Image(systemName: "checkmark")
+                                    .opacity(item == selectedItem ? 1 : 0)
+                                Spacer()
                             }
+                           
                         }
                     }
+                    .animation(.easeOut, value: selectedItem)
                     Spacer()
                 }
             } detail: {
@@ -66,6 +81,8 @@ struct MyProjectsView: View {
                             } else {
                                 await openImmersiveSpace(id: "PreviewFurniture")
                                 isImmersive = true
+                                appState.furnitureNameToBePreviewed = selectedItem
+                                
                             }
                         }
                         

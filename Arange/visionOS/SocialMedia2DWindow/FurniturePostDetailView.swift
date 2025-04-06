@@ -9,36 +9,46 @@ import RealityKit
 import RealityKitContent
 
 struct FurniturePostDetailView: View {
+    @EnvironmentObject private var appState: AppState
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
-    @EnvironmentObject private var appState: AppState
     @State private var isImmersive = false
     @State private var count = 1
-    
+    @State private var showMoreDescriptionPopover = false
+    @State private var isMoreDescriptionHovered = false
+    @State private var rating: Int = 0  // Interactive star rating
+
+    // Removed local heart state; now passed in as a binding.
+    @Binding var heartIsTapped: Bool
+
     let image: String
     let name: String
     let description: String
-    let moreDescription: String = """
-This modern lounge chair features a curved wooden frame with a smooth walnut finish, 
-paired with plush, foam-filled cushions upholstered in soft gray fabric. 
-"""
+    let moreDescription: String
     let price: Double
-    
+
     let productInformationLabels: [String] = [
         "Product details",
         "Measurements",
         "Delivery",
         "Assembly instructions"
     ]
-    
-    init(image: String = "DefaultFurnitureImage", name: String = "Default Furniture Name", description: String = "Default Description", price: Double = 0.0) {
+
+    init(image: String = "DefaultFurnitureImage",
+         name: String = "Default Furniture Name",
+         description: String = "Default Description",
+         moreDescription: String = "",
+         price: Double = 0.0,
+         heartIsTapped: Binding<Bool>) {
         self.image = image
         self.name = name
         self.description = description
+        self.moreDescription = moreDescription
         self.price = price
+        self._heartIsTapped = heartIsTapped
     }
-    
+
     var body: some View {
         GeometryReader3D { proxy in
             HStack {
@@ -49,62 +59,99 @@ paired with plush, foam-filled cushions upholstered in soft gray fabric.
                         Button(isImmersive ? "Finish preview" : "Preview in your space") {
                             Task {
                                 if isImmersive {
-                                    //                                    dismissWindow(id: "volumetricWindow")
                                     await dismissImmersiveSpace()
                                     appState.isImmersive = false
                                 } else {
-                                    //                                    openWindow(id: "volumetricWindow")
                                     await openImmersiveSpace(id: "PreviewFurniture")
                                     appState.isImmersive = true
+                                    appState.furnitureNameToBePreviewed = name
                                 }
-                                
                                 isImmersive.toggle()
                             }
-                        }.offset(y: proxy.size.height / 2.8)
+                        }
+                        .offset(y: proxy.size.height / 2.8)
                     }
                 VStack(alignment: .leading, spacing: 20) {
+                    // Top bar with back, share, and favorite (heart) button.
                     HStack {
                         Button {
                             dismiss()
                         } label: {
                             Image(systemName: "arrow.left")
                         }
-                        
+
                         Spacer()
-                        
+
                         Button {
-                            
+                            // Share action
                         } label: {
                             Image(systemName: "square.and.arrow.up")
                         }
-                        
+
                         Button {
-                            
+                            withAnimation {
+                                heartIsTapped.toggle()
+                            }
                         } label: {
-                            Image(systemName: "heart")
+                            Image(systemName: heartIsTapped ? "heart.fill" : "heart")
                         }
-                        
-                    }.padding()
-                    
+                    }
+                    .padding()
+
                     Spacer()
-                    
+
+                    // Title, description, and interactive star rating.
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(name).font(.largeTitle)
+                            Text(name)
+                                .font(.largeTitle)
                             Text(description)
                         }
                         Spacer()
-                        Text("12 reviews")
-                        HStack(spacing: 0.1) {
-                            ForEach(0..<5, id: \.self) { idx in
-                                Image(systemName: idx < 4 ? "star.fill" : "star")
-                                
+                        VStack(alignment: .trailing) {
+                            Text("Rate this product:")
+                                .font(.subheadline)
+                            HStack(spacing: 4) {
+                                ForEach(1...5, id: \.self) { star in
+                                    Image(systemName: star <= rating ? "star.fill" : "star")
+                                        .foregroundColor(.yellow)
+                                        .onTapGesture {
+                                            rating = star
+                                        }
+                                }
                             }
                         }
                     }
                     
-                    Text(moreDescription).padding(.bottom, 20)
+                    // "moreDescription" text with tap-to-show popover and hover effect that increases font size.
+                    Text(moreDescription)
+                        .font(.system(size: isMoreDescriptionHovered ? 20 : 16))
+                        .padding(.bottom, 20)
+                        .onTapGesture {
+                            showMoreDescriptionPopover = true
+                        }
+                        .popover(isPresented: $showMoreDescriptionPopover) {
+                            VStack(alignment: .center) {
+                                Text("More Description")
+                                    .font(.headline)
+                                    .multilineTextAlignment(.center)
+                                Divider()
+                                ScrollView {
+                                    Text(moreDescription)
+                                        .multilineTextAlignment(.leading)
+                                        .padding()
+                                }
+                            }
+                            .padding()
+                            .frame(width: 250)  // Limit the popover width.
+                        }
+                        .onHover { hovering in
+                            withAnimation(.easeInOut) {
+                                isMoreDescriptionHovered = hovering
+                            }
+                        }
                     
+                    // Product information labels.
                     ForEach(productInformationLabels, id: \.self) { label in
                         VStack {
                             Divider().offset(y: -10)
@@ -113,10 +160,11 @@ paired with plush, foam-filled cushions upholstered in soft gray fabric.
                                 Spacer()
                                 Image(systemName: "plus")
                             }
-                        }.padding(.bottom, 5)
-                        
+                        }
+                        .padding(.bottom, 5)
                     }
                     
+                    // Quantity selection and Add to Cart button.
                     HStack {
                         Spacer()
                         HStack {
@@ -130,7 +178,6 @@ paired with plush, foam-filled cushions upholstered in soft gray fabric.
                             Text("\(count)")
                                 .font(.system(size: 20, weight: .bold))
                             
-                            
                             Button(action: {
                                 count += 1
                             }) {
@@ -141,31 +188,20 @@ paired with plush, foam-filled cushions upholstered in soft gray fabric.
                         .background(RoundedRectangle(cornerRadius: 22).fill(Color.white.opacity(0.3)))
                         
                         Button {
-                            
+                            // Add to cart action
                         } label: {
                             Text("Add to cart (\(price, format: .currency(code: "USD")))")
                                 .foregroundStyle(.black)
-                            
-                            
-                        }.background(Color.yellow, in: RoundedRectangle(cornerRadius: 22))
-                        
+                        }
+                        .background(Color.yellow, in: RoundedRectangle(cornerRadius: 22))
                     }
                     
                     Spacer()
-                    
                 }
                 .padding()
-                
-                
             }
         }
         .glassBackgroundEffect()
-        
     }
-}
-
-#Preview {
-    FurniturePostDetailView(image: "table12d", name: "Table 1", description: "Side table, stone, 40x28cm", price: 83)
-        .environmentObject(AppState())
 }
 
