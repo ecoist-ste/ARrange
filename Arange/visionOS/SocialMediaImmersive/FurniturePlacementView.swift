@@ -28,7 +28,7 @@ struct FurniturePlacementView: View {
                 entity.components.set(CollisionComponent(shapes: [.generateBox(size: [1, 1, 1])]))
                 entity.components.set(InputTargetComponent(allowedInputTypes: .all))
                 content.add(entity)
-                entity.position = SIMD3<Float>(0, 0.5, -1.8)
+                entity.position = SIMD3<Float>(0, 0, -1.8)
                 entity.transform.scale = SIMD3<Float>(0.8, 0.8, 0.8)
                 print("scene's position: ", entity.position)
                 

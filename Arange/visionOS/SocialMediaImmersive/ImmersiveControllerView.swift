@@ -1,54 +1,56 @@
 #if os(visionOS)
 import SwiftUI
 
-struct ImmersiveControllerView: View {
-    @EnvironmentObject var sphereController: SphereController
-    @EnvironmentObject var immersiveController: ImmersiveSphereViewModel
-    private let totalBatches: Int = 4  // With 20 spheres and 5 per batch.
+struct Pin: Identifiable {
+    let id = UUID()
+    var position: SIMD3<Float>
+    var comment: String
+}
+
+class PinManager: ObservableObject {
+    @Published var pins: [Pin] = []
     
+    func addPin(at position: SIMD3<Float>, with comment: String) {
+        let newPin = Pin(position: position, comment: comment)
+        pins.append(newPin)
+    }
+}
+
+struct ImmersiveControllerView: View {
+    @EnvironmentObject var pinManager: PinManager
+    
+    @State private var x: Float = 0
+    @State private var y: Float = 1.5
+    @State private var z: Float = 0
+    @State private var comment: String = ""
+
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
+            Text("Drop a Pin").font(.headline)
+            
             HStack {
-                Button {
-                    // Rotate counterclockwise.
-                    sphereController.animationDirection = -1
-                    if sphereController.currentBatch > 0 {
-                        sphereController.currentBatch -= 1
-                    } else {
-                        sphereController.currentBatch = totalBatches - 1
-                    }
-                } label: {
-                    Image(systemName: "arrow.left.circle")
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                        .padding()
-                }
-                
-                Button("Refresh") {
-                    immersiveController.resetSpheres()
-                }
-                
-                Button {
-                    // Rotate clockwise.
-                    sphereController.animationDirection = 1
-                    if sphereController.currentBatch < totalBatches - 1 {
-                        sphereController.currentBatch += 1
-                    } else {
-                        sphereController.currentBatch = 0
-                    }
-                } label: {
-                    Image(systemName: "arrow.right.circle")
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                        .padding()
-                }
+                Text("X:")
+                Slider(value: $x, in: -5...5)
             }
+            HStack {
+                Text("Y:")
+                Slider(value: $y, in: 0...5)
+            }
+            HStack {
+                Text("Z:")
+                Slider(value: $z, in: -5...5)
+            }
+            
+            TextField("Comment", text: $comment)
+                .textFieldStyle(.roundedBorder)
+            
+            Button("Add Pin") {
+                pinManager.addPin(at: SIMD3<Float>(x, y, z), with: comment)
+                comment = ""
+            }
+            .buttonStyle(.borderedProminent)
         }
         .padding()
-        #if os(visionOS)
-        .glassBackgroundEffect()
-        #endif
-//        .frame(width: 400, height: 600)
     }
 }
 

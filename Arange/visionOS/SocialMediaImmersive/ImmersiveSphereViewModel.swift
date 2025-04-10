@@ -117,7 +117,7 @@ class ImmersiveSphereViewModel: ObservableObject {
     // MARK: - Texture Loading
     /// Main function to create a skybox entity using the given image. It uses the helper functions
     /// to load the texture (downscaling if necessary) and then creates the entity.
-    func createSkybox(using imagePath: String = "demo1", maxDimension: CGFloat = 8193, sphereRadius: Float) -> Entity? {
+    func createSkybox(using imagePath: String = "demo3", maxDimension: CGFloat = 8193, sphereRadius: Float) -> Entity? {
         print(imageTextures)
         
         
