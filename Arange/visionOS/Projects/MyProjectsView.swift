@@ -31,67 +31,68 @@ struct MyProjectsView: View {
                  "homey lamp"]
         
         var body: some View {
-            NavigationSplitView {
-                VStack {
-                    Spacer()
-                    Text("Furnitures")
-                        .font(.title)
-                        .padding()
-                    
-                    Spacer()
-                    
-                    List(items, id: \.self) { item in
-                        Divider()
-                        Button(action: {
-                            selectedItem = item
-                        }) {
-                            HStack {
-                                Spacer()
-                                Text(item)
-                                Image(systemName: "checkmark")
-                                    .opacity(item == selectedItem ? 1 : 0)
-                                Spacer()
-                            }
-                           
-                        }
-                    }
-                    .animation(.easeOut, value: selectedItem)
-                    Spacer()
-                }
-            } detail: {
-                HStack{
-                    Spacer()
-                    
-                    Model3D(named: selectedItem, bundle: realityKitContentBundle) { model in
-                        model
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: 400, maxHeight: 400)
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    .padding()
-                    
-                    Spacer()
-                    
-                    Button(isImmersive ? "Stop viewing" : "View in your space ") {
-                        Task {
-                            if isImmersive {
-                                await dismissImmersiveSpace()
-                                isImmersive = false
-                            } else {
-                                await openImmersiveSpace(id: "PreviewFurniture")
-                                isImmersive = true
-                                appState.furnitureNameToBePreviewed = selectedItem
+                NavigationSplitView {
+                    VStack {
+                        Spacer()
+                        Text("Furnitures")
+                            .font(.title)
+                            .padding()
+                        
+                        Spacer()
+                        
+                        List(items, id: \.self) { item in
+                            Divider()
+                            Button(action: {
+                                selectedItem = item
+                            }) {
+                                HStack {
+                                    Spacer()
+                                    Text(item)
+                                    Image(systemName: "checkmark")
+                                        .opacity(item == selectedItem ? 1 : 0)
+                                    Spacer()
+                                }
                                 
                             }
                         }
-                        
+                        .animation(.easeOut, value: selectedItem)
+                        Spacer()
                     }
-                    .padding()
-                    .buttonStyle(.automatic)
+                } detail: {
+                    HStack{
+                        Spacer()
+                        
+                        Model3D(named: selectedItem, bundle: realityKitContentBundle) { model in
+                            model
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: 400, maxHeight: 400)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .padding()
+                        
+                        Spacer()
+                        
+                        Button(isImmersive ? "Stop viewing" : "View in your space ") {
+                            Task {
+                                if isImmersive {
+                                    await dismissImmersiveSpace()
+                                    isImmersive = false
+                                } else {
+                                    await openImmersiveSpace(id: "PreviewFurniture")
+                                    isImmersive = true
+                                    appState.furnitureNameToBePreviewed = selectedItem
+                                    
+                                }
+                            }
+                            
+                        }
+                        .padding()
+                        .buttonStyle(.automatic)
+                    }
                 }
-            }
+            
         }
 }
 

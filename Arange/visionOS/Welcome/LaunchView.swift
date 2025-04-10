@@ -37,7 +37,7 @@ struct LaunchView: View {
     
     var authentication: some View {
         ZStack {
-            Image("banner1")
+            Image("interior")
                 .resizable()
             VStack {
                 Spacer()
@@ -66,7 +66,7 @@ struct LaunchView: View {
                 }
                 
                 
-                Text("range")
+                Text("chitect")
                     .font(.system(size: 75, weight: .ultraLight, design: .rounded))
                     .foregroundColor(.black)
                 

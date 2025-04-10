@@ -18,19 +18,25 @@ let FurnitureFilterWords: [String] = [
 ]
 
 struct FurnitureFiltersView: View {
+    @Binding var selectedCategory: String
+    
     var body: some View {
         ScrollView(.horizontal) {
             HStack {
                 ForEach(FurnitureFilterWords, id: \.self) { word in
                     Button {
-                        // TODO: hh
+                        selectedCategory = word
                     } label: {
                         Text(word)
-
+                            .padding()
+                            .bold(selectedCategory == word)
+                            .font(selectedCategory == word ? .system(size: 20) : .system(size: 16))
+                            
+                            
                     }
                 }
             }
-            
+            .padding(.vertical, 10)
         }
     }
 }
@@ -38,5 +44,5 @@ struct FurnitureFiltersView: View {
 
 
 #Preview {
-    FurnitureFiltersView()
+    FurnitureFiltersView(selectedCategory: .constant("Bedroom"))
 }

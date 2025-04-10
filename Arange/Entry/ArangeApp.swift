@@ -16,6 +16,8 @@ struct ArangeApp: App {
     @StateObject private var appState = AppState()
     @StateObject private var furnitureViewModel = FurnitureViewModel()
     @StateObject private var immersiveSphereViewModel = ImmersiveSphereViewModel()
+    @StateObject private var pinManager = PinManager()
+    @State private var immersionStyle: ImmersionStyle = .progressive
     #endif
     
     init() {
@@ -39,6 +41,7 @@ struct ArangeApp: App {
         
         WindowGroup(id: "ImmersiveController") {
             ImmersiveControllerView()
+                .environmentObject(pinManager)
                 .environmentObject(sphereController)
                 .environmentObject(immersiveSphereViewModel)
         }
@@ -46,9 +49,12 @@ struct ArangeApp: App {
         
         ImmersiveSpace(id: "ImmersiveSphereView") {
             ImmersiveSphereView()
-                .environmentObject(sphereController)
+//                .environmentObject(sphereController)
                 .environmentObject(immersiveSphereViewModel)
+                .environmentObject(pinManager)
+                .preferredSurroundingsEffect(.dark)
         }
+        .immersionStyle(selection: $immersionStyle, in: .progressive(0.3...1.0, initialAmount: 0.3))
         
         ImmersiveSpace(id: "PreviewFurniture") {
             FurniturePlacementView()
