@@ -17,8 +17,8 @@ struct ImmersivePostsEntryView: View {
     let columns = [GridItem(.adaptive(minimum: 300), spacing: 16)]
     
     init() {
-        for _ in 0..<50 {
-            allImmersivePosts.append(        ImmersivePost(textureImagePath: "", previewImagePath: "defaultPreviewImagePath"))
+        for i in 0..<50 {
+            allImmersivePosts.append(ImmersivePost(textureImagePath: "", previewImagePath: "demo\(i % 12 == 0 ? 10 : i % 12)"))
         }
     }
     
@@ -39,6 +39,7 @@ struct ImmersivePostsEntryView: View {
             
         }
     }
+    
 }
 
 struct ImmersivePostCardView: View {
