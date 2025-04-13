@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FurniturePostSpheresView: View {
     var body: some View {
-        VStack {
+        ZStack {
             Image("social_media_immersive_sphere")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
@@ -23,7 +23,8 @@ struct FurniturePostSpheresView: View {
                     .padding()
                     .clipShape(Capsule())
             }
-            .padding(.top, -200)
+            .offset(y: 150)
+        
         }
         .padding()
     }

@@ -12,11 +12,13 @@ import SwiftUI
 
 struct SocialMediaLandingView: View {
     @State private var selectedCategory: String = "All"
+    @State private var windowWidth: CGFloat = 0
+    @State private var windowHeight: CGFloat = 0
     
     var body: some View {
         NavigationStack {
             ZStack {
-//                AnimatedFlowingGradientBackground()
+                //                AnimatedFlowingGradientBackground()
                 Image("interior").resizable().opacity(0.5)
                 ScrollView {
                     LazyVStack {
@@ -34,8 +36,9 @@ struct SocialMediaLandingView: View {
                 }
             }
         }
+        
     }
-
+    
     var featurePostView: some View {
         Image("banner4")
             .resizable()
@@ -46,8 +49,9 @@ struct SocialMediaLandingView: View {
                 Button("Discover ➜") {}.buttonStyle(.bordered)
                     .offset(x: -450, y: 150)
             }
+            .padding(.bottom)
     }
-
+    
     var furnitureRecView: some View {
         VStack(alignment: .leading) {
             Text("Get Inspired").font(.extraLargeTitle)
@@ -60,7 +64,7 @@ struct SocialMediaLandingView: View {
 
 struct AnimatedFlowingGradientBackground: View {
     @State private var animate = false
-
+    
     var body: some View {
         GeometryReader { geo in
             LinearGradient(

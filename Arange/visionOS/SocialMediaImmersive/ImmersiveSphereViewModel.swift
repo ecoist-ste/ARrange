@@ -46,7 +46,7 @@ class ImmersiveSphereViewModel: ObservableObject {
     @Published var originalPos: SIMD3<Float> = .zero
     
     init() {
-        resetSpheres()
+//        resetSpheres()
     }
     
     func resetSpheres() {

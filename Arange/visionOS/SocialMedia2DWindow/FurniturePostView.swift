@@ -106,7 +106,7 @@ struct FurniturePostView: View {
             selectedCategory == "All" || item[4] == selectedCategory
         }
         ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 300), spacing: 30)], spacing: 30) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 250), spacing: 30)], spacing: 30) {
                 ForEach(filtered, id: \.0) { index, item in
                     let currentPrice = Double.random(in: 66.35..<900.35)
                     let heartBinding = Binding<Bool>(
