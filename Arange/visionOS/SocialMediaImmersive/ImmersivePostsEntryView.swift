@@ -8,36 +8,76 @@
 import SwiftUI
 
 
-
 struct ImmersivePostsEntryView: View {
-
-    
     var allImmersivePosts: [ImmersivePost] = []
+
+    let columns = [GridItem(.adaptive(minimum: 360), spacing: 32)]
     
-    let columns = [GridItem(.adaptive(minimum: 300), spacing: 16)]
-    
+    let userNames = [
+        "Steven",
+        "Jordan",
+        "Jiyoon",
+        "Amiire",
+        "Tim"
+    ]
+    @State private var scrollIndex = 0
+
     init() {
-        for _ in 0..<50 {
-            allImmersivePosts.append(        ImmersivePost(textureImagePath: "", previewImagePath: "defaultPreviewImagePath"))
+        for i in 0..<50 {
+            allImmersivePosts.append(ImmersivePost(
+                textureImagePath: "demo\(i % 12 == 0 ? 10 : i % 12)",
+                previewImagePath: "demo\(i % 12 == 0 ? 10 : i % 12)",
+                avatarImageName: "avatar\(i % 5)",
+                caption: "Interior style \(i + 1)",
+                username: "\(userNames[i % 5])"
+            ))
         }
     }
-    
+
     var body: some View {
-        ZStack {
-            Image("interior").resizable().opacity(0.5)
+        ScrollViewReader { scrollProxy in
             ScrollView {
-                Spacer()
-                LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(allImmersivePosts) { post in
+                LazyVGrid(columns: columns, spacing: 32) {
+                    ForEach(Array(allImmersivePosts.enumerated()), id: \.1.id) { index, post in
                         ImmersivePostCardView(post: post)
+                            .id(index)
                     }
                 }
-                .background(.clear)
-                .padding(.horizontal)
-                Spacer()
+                .padding(.horizontal, 32)
+                .padding(.top, 40)
+                .padding(.bottom, 200) // leave space for ornament
             }
-            
+            .onChange(of: scrollIndex) { newValue in
+                withAnimation(.easeInOut) {
+                    scrollProxy.scrollTo(newValue, anchor: .top)
+                }
+            }
         }
+        .ornament(attachmentAnchor: .scene(.bottom), contentAlignment: .center) {
+            HStack(spacing: 40) {
+                Button {
+                    scrollIndex = max(scrollIndex - 6, 0)
+                } label: {
+                    Image(systemName: "chevron.up.circle.fill")
+                        .font(.system(size: 50))
+                        .foregroundStyle(.white)
+                        .shadow(radius: 4)
+                }
+
+                Button {
+                    scrollIndex = min(scrollIndex + 6, allImmersivePosts.count - 1)
+                } label: {
+                    Image(systemName: "chevron.down.circle.fill")
+                        .font(.system(size: 50))
+                        .foregroundStyle(.white)
+                        .shadow(radius: 4)
+                }
+            }
+            .padding()
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        }
+        .ignoresSafeArea()
     }
 }
 
@@ -46,39 +86,75 @@ struct ImmersivePostCardView: View {
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismissWindow) private var dismissWindow
-    @State private var isImmerive = false
+    @EnvironmentObject private var appstate: AppState
     @State private var isHovered = false
     let post: ImmersivePost
-    
+
     var body: some View {
-        Image(post.previewImagePath)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .clipShape(RoundedRectangle(cornerRadius: 22))
-            .hoverEffect(.highlight)
-            .hoverEffect { effect, isActive, _ in
-                effect
-                    .scaleEffect(isActive ? 1.1 : 1.0)
-            }
-            .overlay {
-                Button(isImmerive ? "Exit" : "Open") {
-                    Task {
-                        if isImmerive {
-                          await  dismissImmersiveSpace()
-                            isImmerive = false
-                            dismissWindow(id: "ImmersiveController")
-                        } else {
-                            await openImmersiveSpace(id: "ImmersiveSphereView")
-                            isImmerive = true
-                            openWindow(id: "ImmersiveController")
-                        }
-                    }
+        ZStack {
+            RoundedRectangle(cornerRadius: 25)
+                .fill(.ultraThinMaterial)
+                .shadow(color: .black.opacity(0.2), radius: isHovered ? 20 : 10, x: 0, y: 10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 25)
+                        .stroke(Color.white.opacity(0.15), lineWidth: 1)
+                )
+
+            VStack {
+                HStack(spacing: 10) {
+                    Image(post.avatarImageName)
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                        .aspectRatio(contentMode: .fill)
+                        .clipShape(Circle())
+
+                    Text(post.username)
+                        .font(.headline)
+                        .bold()
+
+                    Spacer()
                 }
-                .opacity(0.8)
-                .padding(.top, 50)
+                .padding(.top, 10)
+                .padding(.horizontal, 12)
+
+                Spacer(minLength: 4)
+
+                Image(post.previewImagePath)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .clipShape(RoundedRectangle(cornerRadius: 22))
+                    .padding(.horizontal, 8)
+
+                Spacer(minLength: 4)
+
+                Text(post.caption)
+                    .font(.title3)
+                    .bold()
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 10)
+                    .padding(.bottom, 10)
             }
-            
-        
+            .foregroundStyle(
+                .white.opacity(1)
+            )
+        }
+        .frame(width: 380, height: 280)
+        .padding()
+        .hoverEffect(.highlight)
+        .hoverEffect { effect, isActive, _ in
+            effect.scaleEffect(isActive ? 1.05 : 1.0)
+        }
+        .onHover { hovering in
+            isHovered = hovering
+        }
+        .onTapGesture {
+            appstate.immersiveViewTextureImagePath = post.textureImagePath
+            Task {
+                await openImmersiveSpace(id: "ImmersiveSphereView")
+                openWindow(id: "ImmersiveController")
+            }
+        }
+
     }
 }
 
@@ -86,13 +162,24 @@ struct ImmersivePost: Identifiable {
     let id: UUID = UUID()
     let textureImagePath: String
     let previewImagePath: String
-    
-    init(textureImagePath: String = "defaultTextureImagePath", previewImagePath: String = "defaultPreviewImagePath") {
+    let avatarImageName: String
+    let caption: String
+    let username: String
+
+    init(textureImagePath: String = "defaultTextureImagePath",
+         previewImagePath: String = "defaultPreviewImagePath",
+         avatarImageName: String = "avatar0",
+         caption: String = "A beautiful room.",
+         username: String = "guest_user") {
         self.textureImagePath = textureImagePath
         self.previewImagePath = previewImagePath
+        self.avatarImageName = avatarImageName
+        self.caption = caption
+        self.username = username
     }
 }
 
 #Preview {
     ImmersivePostsEntryView()
+        .environmentObject(AppState())
 }

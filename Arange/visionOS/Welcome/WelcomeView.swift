@@ -13,7 +13,7 @@ struct WelcomeView: View {
                 .resizable()
             VStack {
                 Spacer()
-                Text("Welcome home!")
+                Text("Welcome home, Architect!")
                     .font(.system(size: 50))
                     .bold()
                 Spacer()

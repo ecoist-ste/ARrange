@@ -74,11 +74,11 @@ struct LaunchView: View {
             .onAppear {
                 startColorChangeTimer()
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                     showWelcomePage = true
                 }
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5) { showLandingPage = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 6) { showLandingPage = true
                 }
                 
             }
@@ -99,7 +99,7 @@ extension LaunchView {
     func startColorChangeTimer() {
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { _ in
             isHighlighted = true
-            rectangleColor = isHighlighted ? .black : .white
+            rectangleColor = isHighlighted ? .brown : .white
             textColor = isHighlighted ? .white : .black
         }
     }

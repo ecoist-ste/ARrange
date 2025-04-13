@@ -7,8 +7,9 @@ struct Pin: Identifiable {
     var comment: String
 }
 
+@Observable
 class PinManager: ObservableObject {
-    @Published var pins: [Pin] = []
+    var pins: [Pin] = []
     
     func addPin(at position: SIMD3<Float>, with comment: String) {
         let newPin = Pin(position: position, comment: comment)
@@ -17,6 +18,8 @@ class PinManager: ObservableObject {
 }
 
 struct ImmersiveControllerView: View {
+    @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
+    @Environment(\.dismissWindow) private var dismissWindow
     @EnvironmentObject var pinManager: PinManager
     
     @State private var x: Float = 0
@@ -49,13 +52,21 @@ struct ImmersiveControllerView: View {
                 comment = ""
             }
             .buttonStyle(.borderedProminent)
+            
+            Button("Exit Immersive Space") {
+                Task {
+                    await dismissImmersiveSpace()
+                    dismissWindow(id: "ImmersiveController")
+                }
+            }
+            .buttonStyle(.borderedProminent)
         }
         .padding()
     }
 }
 
-//#Preview {
-//    ImmersiveControllerView()
-//        .environmentObject(SphereController())
-//}
+#Preview {
+    ImmersiveControllerView()
+        .environmentObject(PinManager())
+}
 #endif

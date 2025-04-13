@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7F4871CA2DA0BC930083834C /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; platformFilters = (xros, ); productRef = 7F4871C92DA0BC930083834C /* RealityKitContent */; };
+		7F4871CA2DA0BC930083834C /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = 7F4871C92DA0BC930083834C /* RealityKitContent */; };
 		7F8A8CFB2DA2230200CA1E39 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7F8A8CFA2DA2230200CA1E39 /* GoogleService-Info.plist */; };
 		7F8A8CFD2DA2231D00CA1E39 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7F8A8CFC2DA2231D00CA1E39 /* FirebaseCore */; };
 		7FB4006E2DA240B100830C3F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 7FB4006D2DA240B100830C3F /* FirebaseStorage */; };

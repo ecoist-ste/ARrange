@@ -38,6 +38,7 @@ struct ArangeApp: App {
                 .environmentObject(furnitureViewModel)
                 .environmentObject(immersiveSphereViewModel)
         }
+        .defaultSize(width: 1480, height: 800)
         
         WindowGroup(id: "ImmersiveController") {
             ImmersiveControllerView()
@@ -49,9 +50,9 @@ struct ArangeApp: App {
         
         ImmersiveSpace(id: "ImmersiveSphereView") {
             ImmersiveSphereView()
-//                .environmentObject(sphereController)
                 .environmentObject(immersiveSphereViewModel)
                 .environmentObject(pinManager)
+                .environmentObject(appState)
                 .preferredSurroundingsEffect(.dark)
         }
         .immersionStyle(selection: $immersionStyle, in: .progressive(0.3...1.0, initialAmount: 0.3))

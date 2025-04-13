@@ -20,5 +20,7 @@ class AppState: ObservableObject {
     var isImmersive = false
     
     var furnitureNameToBePreviewed: String = "elegant_couch"
+    
+    var immersiveViewTextureImagePath: String = "demo3"
 }
 
