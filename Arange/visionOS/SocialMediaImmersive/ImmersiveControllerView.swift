@@ -32,11 +32,11 @@ struct ImmersiveControllerView: View {
             Text("Drop a Pin").font(.headline)
             
             HStack {
-                Text("X:")
+                Text("Pin's size:")
                 Slider(value: $x, in: -5...5)
             }
             HStack {
-                Text("Y:")
+                Text("Pin's color:")
                 Slider(value: $y, in: 0...5)
             }
             HStack {
