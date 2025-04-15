@@ -48,7 +48,9 @@ struct ImmersiveControllerView: View {
                 .textFieldStyle(.roundedBorder)
             
             Button("Add Pin") {
-                pinManager.addPin(at: SIMD3<Float>(x, y, z), with: comment)
+                let direction = simd_normalize(SIMD3<Float>(0, 1.5, -2))
+                let initialPosition = direction * 9.0
+                pinManager.addPin(at: initialPosition, with: comment)
                 comment = ""
             }
             .buttonStyle(.borderedProminent)

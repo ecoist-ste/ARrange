@@ -14,75 +14,90 @@ import RealityKitContent
 let furnitureThumbnails: [[String]] = [
     [
         "furniture0",
-        "elegant couch",
+        "Monarch Ivory Sofa",
         "Refined and plush centerpiece",
-        "This elegant couch showcases timeless sophistication with its graceful curves and plush cushions. Designed for both comfort and class, it's the perfect statement piece for upscale living rooms or refined lounge areas.",
+        "This white velvet sofa exudes luxury with its elegant curves and rich upholstery. A perfect blend of comfort and sophistication, it's ideal for upscale lounges and cozy statement corners.",
         "Living room"
     ],
     [
         "furniture1",
-        "errie lamp",
+        "Luna Noir Lamp",
         "Mysterious ambient lighting",
         "This eerie lamp emits a soft, mysterious glow that adds an intriguing ambiance to any room. With its otherworldly design and shadowy charm, it’s ideal for creating a moody and atmospheric vibe.",
         "Bedroom"
     ],
     [
         "furniture2",
-        "cozy armchair",
+        "Cloudhaven Armchair",
         "Soft and inviting seat",
         "This cozy armchair invites you to sink in and relax with its deep seat and soft upholstery. Designed for warmth and comfort, it’s perfect for reading corners, fireside chats, or lazy Sunday afternoons.",
         "Living room"
     ],
     [
         "furniture3",
-        "modern side table",
+        "Orbit Side Table",
         "Minimalist and functional",
         "This modern side table features clean lines and a minimalist profile that complements contemporary decor. Functional yet stylish, it's perfect for holding your favorite books, plants, or a cup of coffee.",
         "Living room"
     ],
     [
         "furniture4",
-        "wooden chair",
+        "Heritage Wood Chair",
         "Classic and sturdy",
         "This wooden chair combines sturdy craftsmanship with rustic charm. With its solid frame and classic silhouette, it's a versatile addition to any dining area, study, or cozy nook.",
         "Dining"
     ],
     [
         "furniture5",
-        "game chair",
+        "Vortex Gaming Chair",
         "Ergonomic and sleek",
         "This game chair is built for performance and comfort, featuring an ergonomic design and sleek, modern look. Whether you're gaming for hours or working from home, it supports your posture while looking sharp.",
         "Workspace"
     ],
     [
         "furniture6",
-        "lean chair",
+        "Slimline Task Chair",
         "Slim and modern",
         "This lean chair is designed with simplicity in mind, offering a lightweight frame and slender profile. Ideal for small spaces or minimalist interiors, it provides style without the bulk.",
         "Workspace"
     ],
     [
         "furniture7",
-        "white couch",
+        "Alba Lounge Sofa",
         "Bright and modern",
         "This white couch brings a fresh, airy feel to any room with its clean lines and neutral tone. Its soft cushions and modern silhouette make it both stylish and welcoming for everyday living.",
         "Living room"
     ],
     [
         "furniture8",
-        "study lamp",
+        "FocusLite Desk Lamp",
         "Focused desk lighting",
         "This study lamp provides focused light with an adjustable design that’s perfect for desks and workstations. Its sleek finish and compact form make it a must-have for productivity and modern decor.",
         "Workspace"
     ],
     [
         "furniture9",
-        "homey lamp",
+        "HearthGlow Lamp",
         "Warm and cozy glow",
         "This homey lamp adds a gentle, comforting glow to your space. With its warm light and charming design, it's perfect for bedrooms, reading corners, or any place where coziness is key.",
         "Bedroom"
+    ],
+    [
+        "furniture10",
+        "Rust Luxe Ottoman",
+        "Luxe and inviting texture",
+        "This velvet ottoman adds a rich, tactile element to your living space. Upholstered in deep rust fabric, it's ideal as a footrest or casual coffee table, delivering warmth and style in one plush package.",
+        "Living room"
+    ],
+    [
+        "furniture11",
+        "Marquina Stone Island",
+        "Sleek and sculptural centerpiece",
+        "This black marble kitchen island combines monolithic form with timeless elegance. Featuring dramatic white veining and a bold presence, it's a show-stopping statement for contemporary kitchens.",
+        "Kitchen"
     ]
 ]
+
 
 struct FurniturePostView: View {
     // Each inner array: [image, name, short description, more description]
