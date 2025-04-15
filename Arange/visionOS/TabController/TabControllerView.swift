@@ -36,7 +36,7 @@ enum TabItem: CaseIterable {
             case .home:
                 return "Home"
             case .projects:
-                return "Furniture Library"
+                return "My Furniture"
             case .profile:
                 return "My Profile"
         }

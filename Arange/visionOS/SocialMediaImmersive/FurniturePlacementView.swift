@@ -10,7 +10,11 @@ import SwiftUI
 import RealityKit
 import RealityKitContent
 
+
+
+
 struct FurniturePlacementView: View {
+    
     
     var entityNamePath: String {
         appState.furnitureNameToBePreviewed
@@ -31,16 +35,26 @@ struct FurniturePlacementView: View {
                 entity.position = self.furniturePosition
                 entity.transform.scale = SIMD3<Float>(0.8, 0.8, 0.8)
                 print("scene's position: ", entity.position)
-                
+
+                // Add directional light
+                let directionalLight = DirectionalLight()
+                directionalLight.light.intensity = 5000
+                directionalLight.light.color = .white
+                directionalLight.shadow = DirectionalLightComponent.Shadow(maximumDistance: 10)
+                directionalLight.orientation = simd_quatf(angle: -.pi / 3, axis: [1, 0, 0])
+                directionalLight.position = [0, 2.5, 0]
+                content.add(directionalLight)
+
+                // Optional: still keep point light for subtle red fill if you want
+                // let pointLight = Lighting().light
+                // entity.components.set(pointLight)
+
                 if let lock = attachments.entity(for: "lock") {
-                    
                     lock.position = entity.position
                     lock.position.y += 0.9
                     lock.position.z += 1
                     lock.transform.scale = SIMD3<Float>(1.2, 1.2, 1.2)
-                
                     entity.addChild(lock)
-                    
                     print("label's position: ", lock.position)
                 }
             }

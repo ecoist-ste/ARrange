@@ -32,11 +32,11 @@ struct ImmersiveControllerView: View {
             Text("Drop a Pin").font(.headline)
             
             HStack {
-                Text("X:")
+                Text("Pin's size:")
                 Slider(value: $x, in: -5...5)
             }
             HStack {
-                Text("Y:")
+                Text("Pin's color:")
                 Slider(value: $y, in: 0...5)
             }
             HStack {
@@ -48,7 +48,9 @@ struct ImmersiveControllerView: View {
                 .textFieldStyle(.roundedBorder)
             
             Button("Add Pin") {
-                pinManager.addPin(at: SIMD3<Float>(x, y, z), with: comment)
+                let direction = simd_normalize(SIMD3<Float>(0, 1.5, -2))
+                let initialPosition = direction * 9.0
+                pinManager.addPin(at: initialPosition, with: comment)
                 comment = ""
             }
             .buttonStyle(.borderedProminent)

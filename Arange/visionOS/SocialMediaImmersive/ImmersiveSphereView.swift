@@ -18,7 +18,7 @@ struct ImmersiveSphereView: View {
     @State private var redPinCommentText: String = "Double tap to leave a remark"
     @State private var isEditingRedPinComment: Bool = false
     
-    let rotationSpeed: Float = 0.0003
+    let rotationSpeed: Float = 0.00005
     
     var body: some View {
         RealityView { content in
@@ -30,23 +30,19 @@ struct ImmersiveSphereView: View {
                 content.add(anchor)
             }
             
-            let redPinCommentEntity = createPinEntity(with: redPinCommentText)
-            redPinCommentEntity.position = redPinPosition
-            anchor.addChild(redPinCommentEntity)
             
         } update: { content in
-            if let pinContainer = content.entities.first(where: { $0.name == "pinContainer" }),
-               let textEntity = pinContainer.children.first(where: { $0.name == "text" }) as? ModelEntity {
-                let newTextMesh = MeshResource.generateText(
-                    redPinCommentText,
-                    extrusionDepth: 0.01,
-                    font: .italicSystemFont(ofSize: 0.1),
-                    containerFrame: .zero,
-                    alignment: .left,
-                    lineBreakMode: .byWordWrapping
-                )
-                textEntity.model?.mesh = newTextMesh
-            }
+            guard let anchor = content.entities.first(where: { $0 is AnchorEntity }) as? AnchorEntity else { return }
+
+                for pin in pinManager.pins {
+                    let entityName = "pin_\(pin.id.uuidString)"
+                    if anchor.findEntity(named: entityName) == nil {
+                        let pinEntity = createPinEntity(with: pin.comment)
+                        pinEntity.name = "pinContainer" // 👈 allows dragging
+                        pinEntity.position = pin.position
+                        anchor.addChild(pinEntity)
+                    }
+                }
         } placeholder: {
             ProgressView("Loading…")
                 .scaleEffect(5)
@@ -66,13 +62,15 @@ struct ImmersiveSphereView: View {
                 .targetedToAnyEntity()
                 .onChanged { value in
                     if value.entity.name == "pinContainer" {
-                        let deltaX = Float(value.translation.width)
-                        let deltaY = Float(value.translation.height)
-                        
-                        let angleY = -deltaX * rotationSpeed
-                        let angleX = -deltaY * rotationSpeed
-                        
-                        var pos = initialPinPosition
+                        let dx = Float(value.translation.width)
+                        let dy = Float(value.translation.height)
+
+                        let dragX = log(abs(dx) + 1) * 0.001 * (dx < 0 ? -1 : 1)
+                        let dragY = log(abs(dy) + 1) * 0.001 * (dy < 0 ? -1 : 1)
+
+                        let angleY = -dragX
+                        let angleX = -dragY
+                        var pos = value.entity.position
                         
                         let rotationY = simd_quatf(angle: angleY, axis: SIMD3<Float>(0, 1, 0))
                         pos = rotationY.act(pos)
@@ -82,7 +80,8 @@ struct ImmersiveSphereView: View {
                         pos = rotationX.act(pos)
                         
                         // Constrain to surface of radius 3.0
-                        pos = simd_normalize(pos) * sphereRadius
+                        pos = simd_normalize(pos) * (sphereRadius - 1.0)
+                        
                         
                         value.entity.position = pos
                     }
@@ -93,7 +92,7 @@ struct ImmersiveSphereView: View {
                     let angleY = -deltaX * rotationSpeed
                     let angleX = -deltaY * rotationSpeed
                     
-                    var pos = initialPinPosition
+                    var pos = value.entity.position
                     let rotationY = simd_quatf(angle: angleY, axis: SIMD3<Float>(0, 1, 0))
                     pos = rotationY.act(pos)
                     let right = simd_normalize(simd_cross(pos, SIMD3<Float>(0, 1, 0)))

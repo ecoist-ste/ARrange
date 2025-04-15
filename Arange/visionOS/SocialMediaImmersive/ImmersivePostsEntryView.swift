@@ -35,49 +35,52 @@ struct ImmersivePostsEntryView: View {
     }
 
     var body: some View {
-        ScrollViewReader { scrollProxy in
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 32) {
-                    ForEach(Array(allImmersivePosts.enumerated()), id: \.1.id) { index, post in
-                        ImmersivePostCardView(post: post)
-                            .id(index)
+        ZStack {
+            Image("interior").resizable().opacity(0.5)
+            ScrollViewReader { scrollProxy in
+                ScrollView {
+                    LazyVGrid(columns: columns, spacing: 32) {
+                        ForEach(Array(allImmersivePosts.enumerated()), id: \.1.id) { index, post in
+                            ImmersivePostCardView(post: post)
+                                .id(index)
+                        }
+                    }
+                    .padding(.horizontal, 32)
+                    .padding(.top, 40)
+                    .padding(.bottom, 200) // leave space for ornament
+                }
+                .onChange(of: scrollIndex) { newValue in
+                    withAnimation(.easeInOut) {
+                        scrollProxy.scrollTo(newValue, anchor: .top)
                     }
                 }
-                .padding(.horizontal, 32)
-                .padding(.top, 40)
-                .padding(.bottom, 200) // leave space for ornament
             }
-            .onChange(of: scrollIndex) { newValue in
-                withAnimation(.easeInOut) {
-                    scrollProxy.scrollTo(newValue, anchor: .top)
+            .ornament(attachmentAnchor: .scene(.bottom), contentAlignment: .center) {
+                HStack(spacing: 40) {
+                    Button {
+                        scrollIndex = max(scrollIndex - 6, 0)
+                    } label: {
+                        Image(systemName: "chevron.up.circle.fill")
+                            .font(.system(size: 50))
+                            .foregroundStyle(.white)
+                            .shadow(radius: 4)
+                    }
+                    
+                    Button {
+                        scrollIndex = min(scrollIndex + 6, allImmersivePosts.count - 1)
+                    } label: {
+                        Image(systemName: "chevron.down.circle.fill")
+                            .font(.system(size: 50))
+                            .foregroundStyle(.white)
+                            .shadow(radius: 4)
+                    }
                 }
+                .padding()
+                .background(.ultraThinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             }
+            .ignoresSafeArea()
         }
-        .ornament(attachmentAnchor: .scene(.bottom), contentAlignment: .center) {
-            HStack(spacing: 40) {
-                Button {
-                    scrollIndex = max(scrollIndex - 6, 0)
-                } label: {
-                    Image(systemName: "chevron.up.circle.fill")
-                        .font(.system(size: 50))
-                        .foregroundStyle(.white)
-                        .shadow(radius: 4)
-                }
-
-                Button {
-                    scrollIndex = min(scrollIndex + 6, allImmersivePosts.count - 1)
-                } label: {
-                    Image(systemName: "chevron.down.circle.fill")
-                        .font(.system(size: 50))
-                        .foregroundStyle(.white)
-                        .shadow(radius: 4)
-                }
-            }
-            .padding()
-            .background(.ultraThinMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-        }
-        .ignoresSafeArea()
     }
 }
 

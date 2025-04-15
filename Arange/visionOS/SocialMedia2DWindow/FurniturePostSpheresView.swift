@@ -15,7 +15,7 @@ struct FurniturePostSpheresView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                .frame(maxWidth: 2000)
+                .frame(maxWidth: 2000, maxHeight: 720)
 
             NavigationLink(destination: ImmersivePostsEntryView()) {
                 Text("View Immersive Furniture Posts")
